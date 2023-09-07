@@ -14,7 +14,7 @@ import MainToDo from './components/MainToDo.vue';
 </template>
 
 <style>
-@import 'assets\css/destyle.css';
+@import 'assets/css/destyle.css';
 .wrap{
   display: flex;
   flex-direction: column;
