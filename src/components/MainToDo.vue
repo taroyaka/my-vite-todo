@@ -13,7 +13,7 @@
 
         // ローカルストレージに登録
         // localStorage.todoList.push(JSON.stringify(todoRef.value));
-        localStorage.todoList = (JSON.stringify(todoRef.value));
+        localStorage.todoList = (JSON.stringify(todoListRef.value));
 
 
         // 登録後は入力欄を空にする
