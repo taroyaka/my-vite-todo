@@ -1,7 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 const todoRef = ref('');
+
+// ローカルストレージにtodoListRefが存在していればparseし、
+// なければundifinedになるため空配列をセットする
 const todoListRef = ref([]);
+const ls = localStorage.todoList;
+todoListRef.value = ls ? JSON.parse(ls) : [];
 
 const addTodo = () => {
   // IDをミリ秒単位で登録
@@ -30,18 +35,10 @@ const addTodo = () => {
     <button class="btn" @click="addTodo">追加</button>
   </div>
   <div class="box_list">
-    <div class="todo_list">
+    <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
       <div class="todo">
-        <input type="checkbox" class="check" /><label>TODO01</label>
-      </div>
-      <div class="btns">
-        <button class="btn green">編</button>
-        <button class="btn pink">削</button>
-      </div>
-    </div>
-    <div class="todo_list">
-      <div class="todo">
-        <input type="checkbox" class="check" /><label>TODO02</label>
+        <input type="checkbox" class="check" />
+        <label>{{ todo.task }}</label>
       </div>
       <div class="btns">
         <button class="btn green">編</button>
