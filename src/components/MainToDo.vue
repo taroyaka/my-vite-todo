@@ -1,13 +1,19 @@
 <script setup>
 import { ref } from 'vue';
-const todoRef = ref('');
 
-// ローカルストレージにtodoListRefが存在していればparseし、
-// なければundifinedになるため空配列をセットする
+// TODO入力欄の値
+const todoRef = ref('');
+// 編集モード
+const isEditRef = ref(false); // true:編集モード false:追加モード
+
+// ローカルストレージ保存用配列
 const todoListRef = ref([]);
 const ls = localStorage.todoList;
+// ローカルストレージにtodoListRefが存在していればparseし、
+// なければundifinedになるため空配列をセットする
 todoListRef.value = ls ? JSON.parse(ls) : [];
 
+// 追加ボタン押下時
 const addTodo = () => {
   // IDをミリ秒単位で登録
   const id = new Date().getTime();
@@ -22,6 +28,43 @@ const addTodo = () => {
   // 登録後は入力欄を空にする
   todoRef.value = '';
 };
+
+// 編集対象インデックス参照用
+let editId = -1;
+
+// 編ボタン押下時
+const showTodo = (id) => {
+  //  todoListRefから引数のidと同じ要素を検索
+  // 「(todo)」には配列の要素が入っている
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  todoRef.value = todo.task; // 取得した要素からtaskを取り出す
+  isEditRef.value = true;
+  editId = id;
+};
+
+// 変更ボタン押下時
+const editTodo = () => {
+  // 編集対象となるTODOを取得
+  const todo = todoListRef.value.find((todo) => todo.id === editId);
+
+  // TODOリストから編集対象のインデックスを取得
+  const idx = todoListRef.value.findIndex((todo) => todo.id === editId);
+
+  // taskを編集後のTODOで置き換え
+  todo.task = todoRef.value;
+
+  //インデックスを元に対象オブジェクトを置き換え
+  todoListRef.value.splice(idx, 1, todo);
+
+  // ローカルストレージに保存
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+
+  // 編集モード解除
+  isEditRef.value = false;
+  // IDを初期値に戻す
+  editId = -1;
+  todoRef.value = '';
+};
 </script>
 
 <template>
@@ -32,7 +75,8 @@ const addTodo = () => {
       v-model="todoRef"
       placeholder="＋ TODOを入力"
     />
-    <button class="btn" @click="addTodo">追加</button>
+    <button class="btn green" @click="editTodo" v-show="isEditRef">変更</button>
+    <button class="btn" @click="addTodo" v-show="!isEditRef">追加</button>
   </div>
   <div class="box_list">
     <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
@@ -41,7 +85,7 @@ const addTodo = () => {
         <label>{{ todo.task }}</label>
       </div>
       <div class="btns">
-        <button class="btn green">編</button>
+        <button class="btn green" @click="showTodo(todo.id)">編</button>
         <button class="btn pink">削</button>
       </div>
     </div>
