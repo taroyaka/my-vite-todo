@@ -42,6 +42,20 @@ const showTodo = (id) => {
   editId = id;
 };
 
+// 削除ボタン押下時
+const deleteTodo = (id) => {
+  // 削除対象のTODOを取得
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  // TODOリストから編集対象のインデックスを取得
+  const idx = todoListRef.value.findIndex((todo) => todo.id === editId);
+
+  const delMsg = '「' + todo.task + '」を削除しますか？';
+
+  if (!confirm(delMsg)) return;
+
+  todoListRef.value.splice(idx, 1);
+};
+
 // 変更ボタン押下時
 const editTodo = () => {
   // 編集対象となるTODOを取得
@@ -86,7 +100,7 @@ const editTodo = () => {
       </div>
       <div class="btns">
         <button class="btn green" @click="showTodo(todo.id)">編</button>
-        <button class="btn pink">削</button>
+        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
       </div>
     </div>
   </div>
