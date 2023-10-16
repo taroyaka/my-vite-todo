@@ -4,18 +4,17 @@ import TheFooter from './components/TheFooter.vue';
 import MainToDo from './components/MainToDo.vue';
 </script>
 
-
 <template>
   <div class="wrap">
-      <TheHeader />
-      <MainToDo />
-      <TheFooter />
+    <TheHeader />
+    <MainToDo />
+    <TheFooter />
   </div>
 </template>
 
 <style>
 @import 'assets/css/destyle.css';
-.wrap{
+.wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +23,7 @@ import MainToDo from './components/MainToDo.vue';
   margin: 0 auto;
   font-family: sans-serif;
 }
-.main{
+.main {
   flex: 1;
   width: 100%;
 }
